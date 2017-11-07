@@ -25,6 +25,44 @@ const autoOpenBrowser = !!config.dev.autoOpenBrowser
 const proxyTable = config.dev.proxyTable
 
 const app = express()
+
+// 使用 express 来编写接口请求进行后台数据模拟(mock)
+var appData = require('../data.json')
+// 定义对应数据接口
+var seller = appData.seller
+var goods = appData.goods
+var ratings = appData.ratings
+
+var apiRoutes = express.Router()
+
+apiRoutes.get('/seller', function(req, res) {
+  res.json({
+    // 通过errnumber返回字段 判断数据请求是否正常 一般是0
+    errno: 0,
+    data: seller
+  })
+})
+
+apiRoutes.get('/goods', function(req, res) {
+  res.json({
+    // 通过errnumber返回字段 判断数据请求是否正常 一般是0
+    errno: 0,
+    data: goods
+  })
+})
+
+apiRoutes.get('/ratings', function(req, res) {
+  res.json({
+    // 通过errnumber返回字段 判断数据请求是否正常 一般是0
+    errno: 0,
+    data: ratings
+  })
+})
+
+// const app = express() 所以express对应的就是一个app对象
+app.use('/api', apiRoutes)
+
+
 const compiler = webpack(webpackConfig)
 
 const devMiddleware = require('webpack-dev-middleware')(compiler, {
