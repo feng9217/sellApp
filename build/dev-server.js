@@ -7,8 +7,11 @@ if (!process.env.NODE_ENV) {
 }
 
 const opn = require('opn')
+// path node.js提供的一个api 表示文件路径操作的一些方法
 const path = require('path')
+// express 是一个node.js框架 使用它启动一个webServer
 const express = require('express')
+// webpack 是核心编译工具
 const webpack = require('webpack')
 const proxyMiddleware = require('http-proxy-middleware')
 const webpackConfig = require('./webpack.dev.conf')

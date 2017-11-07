@@ -21,6 +21,7 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
+    // 别名 可以缩短路径字符串长度
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
