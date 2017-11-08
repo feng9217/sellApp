@@ -1,0 +1,26 @@
+// 函数式的css
+// 1px实线 的问题, 在PC端看是 1px 但移动端像素密度高的机子, 说不定就会是 2px
+// 解决方法就是 伪类 + DPR查询
+border-1px-bottom($color)
+  position: relative
+  &:after
+    // 伪类相对于元素本身做绝对定位
+    display: block
+    position: absolute
+    left: 0
+    bottom: 0
+    width: 100%
+    border-top: 1px solid $color
+    content: ' '
+
+border-1px-top($color)
+  position: relative
+  &:before
+    // 伪类相对于元素本身做绝对定位
+    display: block
+    position: absolute
+    left: 0
+    top: 0
+    width: 100%
+    border-top: 1px solid $color
+    content: ' '
