@@ -24,3 +24,9 @@ border-1px-top($color)
     width: 100%
     border-top: 1px solid $color
     content: ' '
+
+// 带 DPR查询 的图片引用
+bg-image($url)
+  background-image: url($url + "@2x.png")
+  @media(-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    background-image: url($url + "@3x.png")
