@@ -17,17 +17,25 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
-      <div v-if="seller.supports" class="support-count">
+      <div v-if="seller.supports" class="support-count" @click="showDetail">
         <span class="count">{{seller.supports.length}}个</span>
         <i class="icon-keyboard_arrow_right"></i>
       </div>
     </div>
-    <div class="board-wrapper">
+    <div class="board-wrapper" @click="showDetail">
       <span class="board-title"></span><span class="board-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
+    </div>
+    <div v-show="Detail" class="detail">
+      <div class="detail-wrapper clearfix">
+        <div class="detail-content"></div>
+      </div>
+      <div class="detail-close">
+        <i class="icon-close"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -42,7 +50,8 @@ export default {
   name: 'v-header',
   data() {
     return {
-      seller: {}
+      seller: {},
+      Detail: false
     }
   },
   mounted() {
@@ -58,6 +67,9 @@ export default {
           console.log(this.seller)
         }
       })
+    },
+    showDetail() {
+      this.Detail = true
     }
   }
 }
@@ -65,6 +77,7 @@ export default {
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
+  @import "../../common/stylus/base.styl"
 
   .header
     color: #fff
@@ -159,7 +172,7 @@ export default {
       .board-title
         display: inline-block
         vertical-align: top
-        margin-top: 7px
+        margin-top: 8px
         width: 22px
         height: 12px
         bg-image('bulletin')
@@ -183,4 +196,38 @@ export default {
       z-index: -1
       // 滤镜产生模糊效果
       filter: blur(10px)
+    .detail
+      position: fixed
+      // 务必记得加上定位 不然不会是整屏的
+      // 不跳转路由 只是使用 z-index 遮挡
+      top: 0
+      left: 0
+      z-index: 100
+      width: 100%
+      height: 100%
+      overflow: auto
+      background: rgba(7,17,27,0.8)
+      // sticky footer
+      // 当页面内容不够长的时候 页脚块粘贴在视窗底部
+      // 当内容足够长的时候 页脚块会被向下推送
+      // 就是内容是否会和底部页脚重合
+      // 用 fixed 布局 则不会被顶下去
+      // 本例使用的方法 是在页面的大div中创建两个子div
+      // 一个是装内容的div wrapper 带clearfix
+      // 另一个是底部内容div
+      .detail-wrapper
+        min-height: 100%
+        .detail-content
+        // 向上有margin 底部有padding 腾位置给底部元素
+        // padding是一定要的!!!!
+          margin-top: 64px
+          padding-bottom: 64px
+      .detail-close
+        position: relative
+        width: 32px
+        height: 32px
+        // margin 和 清除浮动 都是固定套路
+        margin: -64px auto 0 auto
+        clear: both
+        font-size: 32px
 </style>
