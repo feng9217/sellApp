@@ -31,7 +31,12 @@
     </div>
     <div v-show="Detail" class="detail">
       <div class="detail-wrapper clearfix">
-        <div class="detail-content"></div>
+        <div class="detail-content">
+          <h1 class="name">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star-score :size="48" :score="seller.score"></star-score>
+          </div>
+        </div>
       </div>
       <div class="detail-close">
         <i class="icon-close"></i>
@@ -42,6 +47,7 @@
 
 <script type="text/javascript">
 import {getSellerData} from '../../common/js/getData.js'
+import starScore from '../../components/star-score/star-score.vue'
 
 const ERR_OK = 0
 
@@ -71,6 +77,9 @@ export default {
     showDetail() {
       this.Detail = true
     }
+  },
+  components: {
+    starScore
   }
 }
 </script>
@@ -216,12 +225,22 @@ export default {
       // 一个是装内容的div wrapper 带clearfix
       // 另一个是底部内容div
       .detail-wrapper
+        width: 100%
         min-height: 100%
         .detail-content
         // 向上有margin 底部有padding 腾位置给底部元素
         // padding是一定要的!!!!
           margin-top: 64px
           padding-bottom: 64px
+          .name
+            line-height: 16px
+            text-align: center
+            font-size: 16px
+            font-weight: 700
+          .star-wrapper
+            margin-top: 18px
+            padding: 2px 0
+            text-align: center
       .detail-close
         position: relative
         width: 32px
