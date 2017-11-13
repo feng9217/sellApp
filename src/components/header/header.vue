@@ -29,6 +29,7 @@
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
+    <transition name="fade">
     <div v-show="Detail" class="detail">
       <div class="detail-wrapper clearfix">
         <div class="detail-content">
@@ -36,12 +37,33 @@
           <div class="star-wrapper">
             <star-score :size="48" :score="seller.score"></star-score>
           </div>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">优惠信息</div>
+            <div class="line"></div>
+          </div>
+          <ul v-if="seller.supports" class="supports">
+            <!-- 和 vue1.0 不同的 就是关于index语法糖的使用 -->
+            <li class="support-item" v-for="(item, index) in seller.supports">
+              <span class="icon" :class="classMap[seller.supports[index].type]"></span>
+              <span class="text">{{seller.supports[index].description}}</span>
+            </li>
+          </ul>
+          <div class="title">
+            <div class="line"></div>
+            <div class="text">商家公告</div>
+            <div class="line"></div>
+          </div>
+          <div class="board">
+            <p class="content">{{seller.bulletin}}</p>
+          </div>
         </div>
       </div>
-      <div class="detail-close">
+      <div class="detail-close" @click="hideDetail">
         <i class="icon-close"></i>
       </div>
     </div>
+    </transition>
   </div>
 </template>
 
@@ -76,6 +98,9 @@ export default {
     },
     showDetail() {
       this.Detail = true
+    },
+    hideDetail() {
+      this.Detail = false
     }
   },
   components: {
@@ -216,6 +241,14 @@ export default {
       height: 100%
       overflow: auto
       background: rgba(7,17,27,0.8)
+      // 动画定义
+      &.fade-enter-active, &.fade-leave-active
+        transition: all 1.5s
+        opcity: 0.8
+        background: rgba(7,17,27,0.8)
+      &.fade-enter, &.fade-leave-to
+        opcity: 0.2
+        background: rgba(7,17,27,0.2)
       // sticky footer
       // 当页面内容不够长的时候 页脚块粘贴在视窗底部
       // 当内容足够长的时候 页脚块会被向下推送
@@ -241,6 +274,56 @@ export default {
             margin-top: 18px
             padding: 2px 0
             text-align: center
+          .title
+            display: flex
+            width: 80%
+            margin 28px auto 24px auto
+            .line
+              flex: 1
+              position: relative
+              top: -6px
+              border-bottom: 1px solid rgba(255,255,255,0.2)
+            .text
+              padding: 0 12px
+              font-size: 14px
+              font-weight: 700
+          .supports
+            width: 80%
+            margin: 0 auto
+            .support-item
+              padding: 0 12px
+              margin-bottom: 12px
+              font-size: 0
+              &:last-child
+                margin-bottom: 0
+              .icon
+                display: inline-block
+                width: 16px
+                height: 16px
+                vertical-align: top
+                margin-right: 6px
+                background-size: 16px 16px
+                background-repeat: no-repeat
+                &.decrease
+                  bg-image('decrease_2')
+                &.discount
+                  bg-image('discount_2')
+                &.guarantee
+                  bg-image('guarantee_2')
+                &.invoice
+                  bg-image('invoice_2')
+                &.special
+                  bg-image('special_2')
+              .text
+                line-height: 16px
+                font-size: 12px
+          .board
+            width: 80%
+            margin: 0 auto
+            .content
+              padding: 0 12px
+              line-height: 24px
+              font-size: 12px
       .detail-close
         position: relative
         width: 32px
@@ -249,4 +332,6 @@ export default {
         margin: -64px auto 0 auto
         clear: both
         font-size: 32px
+
+
 </style>
