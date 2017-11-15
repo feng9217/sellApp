@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <scroll class="menu-wrapper">
       <ul>
         <li v-for="item in goods" class="menu-item">
           <span class="text" border-1px-bottom>
@@ -8,8 +8,8 @@
           </span>
         </li>
       </ul>
-    </div>
-    <div class="foods-wrapper">
+    </scroll>
+    <scroll class="foods-wrapper">
       <ul>
         <li class="food-list" v-for="item in goods">
           <h1 class="title">{{item.name}}</h1>
@@ -22,23 +22,22 @@
                 <h2 class="name">{{food.name}}</h2>
                 <p class="desc">{{food.description}}</p>
                 <div class="extra">
-                  <span class="count">月售{{food.sellCount}}</span>
-                  <span>好评率{{food.rating}}%</span>
+                  <span class="count">月售{{food.sellCount}}</span><span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
-                  <span class="now">¥{{food.price}}</span>
-                  <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
+                  <span class="now">¥{{food.price}}</span><span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script type="text/javascript">
+  import Scroll from '../scroll/scroll.vue'
   import {getGoodsData} from '../../common/js/getData.js'
 
   const ERR_OK = 0
@@ -68,6 +67,13 @@
           }
         })
       }
+      // 初始化 better-scroll
+      // _initScroll() {
+      // }
+      // 不费那功夫了 直接把封装好的 scroll 组件拿来用
+    },
+    components: {
+      Scroll
     }
   }
 </script>
@@ -81,7 +87,7 @@
     top: 174px
     width: 100%
     bottom: 46px
-    overflow: auto
+    overflow: hidden
     .menu-wrapper
       // 等分 内容不足时缩放情况 占位空间
       flex: 0 0 80px
@@ -151,13 +157,14 @@
             font-size: 14px
             color: rgb(7,17,27)
           .desc, .extra
-            line-height: 10px
             font-size: 10px
             color: rgb(147,153,159)
           .desc
             margin-bottom: 8px
+            line-height: 12px
           .extra
-            &.count
+            line-height: 10px
+            .count
               margin-right: 12px
           .price
             font-weight: 700

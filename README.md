@@ -49,6 +49,14 @@ header + 导航区 + 内容区(goods + ratings + seller)
 内容区的切换基于 vue-router 来实现  
   
 ***
-<h2>header组件</h2>
+<h2>header组件</h2>  
+  
+<h3>数据</h3>
+使用了 axios 从之前定义的api获取了seller的数据, api为: /api/seller
+并在其中加入了Promise  
+  
+<h3>结构划分</h3>  
+总共划分了四个部分: content-wrapper商家信息部分 / board-wrapper公告部分 / background背景模糊区域 / detail详细信息层部分  
+
 
 
