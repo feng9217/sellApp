@@ -6,3 +6,10 @@ export function getSellerData() {
     return Promise.resolve(res.data)
   })
 }
+
+export function getGoodsData() {
+  const url = '/api/goods'
+  return axios.get(url).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}

@@ -25,6 +25,10 @@ border-1px-top($color)
     border-top: 1px solid $color
     content: ' '
 
+border-none()
+  &:after
+    display: none
+
 // 带 DPR查询 的图片引用
 bg-image($url)
   background-image: url($url + "@2x.png")

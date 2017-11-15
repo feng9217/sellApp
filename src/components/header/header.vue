@@ -92,6 +92,7 @@ export default {
       getSellerData().then((res) => {
         if (res.errno === ERR_OK) {
           this.seller = res.data
+          console.log('seller:')
           console.log(this.seller)
         }
       })
@@ -241,9 +242,11 @@ export default {
       height: 100%
       overflow: auto
       background: rgba(7,17,27,0.8)
+      // IOS下的背景模糊效果
+      backdrop-filter: blur(10px)
       // 动画定义
       &.fade-enter-active, &.fade-leave-active
-        transition: all 1.5s
+        transition: all 3.5s
         opcity: 0.8
         background: rgba(7,17,27,0.8)
       &.fade-enter, &.fade-leave-to
