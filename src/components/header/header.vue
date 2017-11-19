@@ -68,7 +68,7 @@
 </template>
 
 <script type="text/javascript">
-import {getSellerData} from '../../common/js/getData.js'
+import {getSellerData} from '../../common/js/getApiData.js'
 import starScore from '../../components/star-score/star-score.vue'
 
 const ERR_OK = 0
