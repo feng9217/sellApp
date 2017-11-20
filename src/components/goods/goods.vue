@@ -37,6 +37,7 @@
       </ul>
     </div>
     </scroll>
+    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -64,23 +65,25 @@
 // 功能二
 // 需要记录每个区间的高度, 获得一个 标识每个区间的高度的递增数组 listHeight, 然后需要实时获得一个纵轴Y值(this.scrollY)和索引值作对比, 如果在listHeight[2], 那对应的就是左侧边栏索引值的 index=2 位置
   import Scroll from '../scroll/scroll.vue'
-  import {getGoodsData} from '../../common/js/getApiData.js'
+  import {getGoodsData, getSellerData} from '../../common/js/getApiData.js'
   import {getData} from '../../common/js/dom.js'
+  import shopcart from '../shop-cart/shop-cart.vue'
 
   const ERR_OK = 0
 
   export default {
     props: {
-      seller: {
-        type: Object
-      }
+      // seller: {
+      //   type: Object
+      // }
     },
     data() {
       return {
         goods: [],
         // food列表每个区间高度
         listHeight: [],
-        scrollY: -1
+        scrollY: -1,
+        seller: {}
       }
     },
     created() {
@@ -94,6 +97,7 @@
       setTimeout(() => {
         this._calculateHeight()
       }, 20)
+      this._getSellerData()
     },
     computed: {
       // 实现右边滚动 左边对应高亮
@@ -175,6 +179,17 @@
         } else {
           this.scrollY = this.listHeight[index - 1]
         }
+      },
+      _getSellerData() {
+        getSellerData().then((res) => {
+          if (res.errno === ERR_OK) {
+            this.seller = res.data
+            console.log('seller:')
+            // console.log(this.seller)
+            console.log(this.seller.deliveryPrice)
+            console.log(this.seller.minPrice)
+          }
+        })
       }
     },
     watch: {
@@ -196,7 +211,8 @@
       // }
     },
     components: {
-      Scroll
+      Scroll,
+      shopcart
     }
   }
 </script>
