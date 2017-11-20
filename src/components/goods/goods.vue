@@ -3,9 +3,9 @@
     <scroll class="menu-wrapper" ref="menuWrapper" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div @touchstart="onMenuTouchStart">
       <ul>
-        <li v-for="(item,index) in goods" class="menu-item" :data-index="index" :class="{'current': currentIndex === index}">
+        <li v-for="(item,index) in goods" class="menu-item" :data-index="index" :class="{'current': currentIndex === index}" @click="selectItem(index)">
           <span class="text" border-1px-bottom>
-            <span class="icon" v-show="item.type > 0" :class="classMap[item.type]"></span>{{item.name}}{{index}}
+            <span class="icon" v-show="item.type > 0" :class="classMap[item.type]"></span>{{item.name}}
           </span>
         </li>
       </ul>
@@ -56,10 +56,13 @@
 // ----
 // question5: 设置了 :class="{'current': currentIndex === index}" 但是样式不随着滚动而改变
 // solution: 在实现滚动右边,左边跟着高亮的时候,发现选取到的仍然是span的index仍然十分尴尬, 因为需要的样式是在li实现的, 之前是借助span的index来实现的, 所以滚动时样式当然不会改变, 所以看了下console.log, 发现使用 el.path[1] 也是能获取到li标签
+// ----
+// question6: 点击菜单, 虽然会滚动, 但高亮位置没改变
+// solution: 因为高亮并没有依赖于点击, 而是根据 this.scrollY 的改动而实现的, 而this.scrollY是根据scroll事件而实时更新的
 // 功能一
 // 点击左边, 右边跳转的实现方法就是: 根据在 span 上设置的 data-index , 在@touchstart时获取这个index值, 并在操纵DOM的时候, 使用 better-scroll 的方法 scrolltoElement 滚动至 foodsWrapper 商品列表下的第 index 个子元素 foodListGroup[index], 实现了点击左边分类, 滚动至具体商品列表的效果。PS: 不能给 @touchstart加.stop阻止冒泡, 这样事件会传不到 scroll 使得整个list不会滚动
 // 功能二
-// 需要记录每个区间的高度, 获得一个 标识每个区间的高度的递增数组 listHeight, 然后需要实时获得一个纵轴Y值(scrollY)和索引值作对比, 如果在listHeight[2], 那对应的就是左侧边栏索引值的 index=2 位置
+// 需要记录每个区间的高度, 获得一个 标识每个区间的高度的递增数组 listHeight, 然后需要实时获得一个纵轴Y值(this.scrollY)和索引值作对比, 如果在listHeight[2], 那对应的就是左侧边栏索引值的 index=2 位置
   import Scroll from '../scroll/scroll.vue'
   import {getGoodsData} from '../../common/js/getApiData.js'
   import {getData} from '../../common/js/dom.js'
@@ -164,6 +167,14 @@
         // 返回值向下取整, 再取绝对值(向下滚动 负值增大 存储的区间是正值)
         this.scrollY = Math.abs(Math.round(pos.y))
         // console.log(this.scrollY)
+      },
+      selectItem(index) {
+        console.log(index)
+        if (index >= 1 && index < 2) {
+          this.scrollY = this.listHeight[index]
+        } else {
+          this.scrollY = this.listHeight[index - 1]
+        }
       }
     },
     watch: {
