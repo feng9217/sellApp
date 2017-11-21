@@ -30,6 +30,9 @@
                 <div class="price">
                   <span class="now">¥{{food.price}}</span><span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
+                <div class="controlbut-wrapper" v-if="food">
+                  <controlbut :food="food"></controlbut>
+                </div>
               </div>
             </li>
           </ul>
@@ -68,6 +71,7 @@
   import {getGoodsData, getSellerData} from '../../common/js/getApiData.js'
   import {getData} from '../../common/js/dom.js'
   import shopcart from '../shop-cart/shop-cart.vue'
+  import controlbut from '../controlbut/controlbut.vue'
 
   const ERR_OK = 0
 
@@ -212,7 +216,8 @@
     },
     components: {
       Scroll,
-      shopcart
+      shopcart,
+      controlbut
     }
   }
 </script>
@@ -325,4 +330,8 @@
               text-decoration: line-through
               font-size: 10px
               color: rgb(147,153,159)
+          .controlbut-wrapper
+            position: absolute
+            right: 0
+            bottom: 12px
 </style>
