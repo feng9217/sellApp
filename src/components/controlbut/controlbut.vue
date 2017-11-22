@@ -1,8 +1,10 @@
 <template>
   <div class="controlbut">
+    <transition name="move">
     <div class="decrease" v-show="food.count>0" @click="decreFromCart">
       <span class="inner icon-remove_circle_outline"></span>
     </div>
+    </transition>
     <div class="count" v-show="food.count>0">{{food.count}}</div>
     <div class="add icon-add_circle" @click="addToCart"></div>
   </div>
@@ -47,29 +49,32 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .controlbut
     font-size: 0
-    &.move-enter-active, &.move-leave-active
-      opacity: 1
-      transform: translate3D(0,0,0)
-    &.move-enter, &.move-leave-to
-      opacity: 0
-      transform: translate3D(24px,0,0)
     .decrease
       display: inline-block
       // 增加点击区域
       padding: 6px
-      // 动画完成后添加的属性
-      transition: all 0.4 linear
-      &.move-transition
-        opacity: 1
-        // 可以开启硬件加速
-        transform: translate3D(0,0,0)
-      &.move-enter, &.move-leave-to
-        opacity: 0
-        transform: translate3D(24px,0,0)
+      transition: all 0.4s linear
       .inner
+        // 设置display 使其有宽高
+        display: inline-block
         font-size: 24px
         line-height: 24px
         color: rgb(0,160,220)
+        transition: all 0.4s linear
+      // 结束状态
+      &.move-enter-active, &.move-leave-active
+        opacity: 1
+        // 可以开启硬件加速
+        transform: translate3D(0,0,0)
+        .inner
+          transform: rotate(0)
+      // 开始状态
+      &.move-enter, &.move-leave-to
+        opacity: 0
+        transform: translate3D(24px,0,0)
+        .inner
+          // deg 一定不能忘 .......
+          transform: rotate(360deg)
     .count
       display: inline-block
       vertical-align: top
