@@ -150,7 +150,9 @@
             console.log(rect)
             // 对应减少的 left 和 bottom 值
             let x = rect.left - 32
+            console.log(x)
             let y = -(window.innerHeight - rect.top - 22)
+            console.log(y)
             // 设置初始位置 且初始化把 display 显示起来
             // 外层做纵向 内层做横向 动画
             el.style.display = ''
@@ -290,14 +292,17 @@
         left: 32px
         bottom: 22px
         z-index: 200
-        &.drop-enter-active, &.drop-leave-active
+        &.drop-enter, &.drop-enter-active
           transition: all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
           .inner
             width: 16px
             height: 16px
             border-radius: 50%
             background: rgb(0,160,220)
-        // 开始状态
-        &.drop-enter, &.drop-leave-to
-          transition: all 0.4s linear
+            transition: all 0.4s linear
+        // 动画过程交由JS定义
+        // 刚开始继续使用 ↓ 定义动画时, 出现了动画 enter的x坐标与js钩子定义不符的情况
+        // 是因为 js钩子 与 这里的 enter enter-active 冲突了
+        // &.drop-enter-active, &.drop-leave-active
+        // &.drop-enter, &.drop-leave-to
 </style>
