@@ -40,7 +40,7 @@
       </ul>
     </div>
     </scroll>
-    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+    <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -130,6 +130,20 @@
         //   return listHeight.length
         // }
         // console.log(listHeight)
+      },
+      selectFoods() {
+        // 通过两层遍历找到被选中的foods
+        // 并传给子组件 实现实时的计算控制
+        let foods = []
+        this.goods.forEach((item) => {
+          item.foods.forEach((food) => {
+            // 在子组件添加了.count属性
+            if (food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     methods: {
@@ -190,8 +204,8 @@
             this.seller = res.data
             console.log('seller:')
             // console.log(this.seller)
-            console.log(this.seller.deliveryPrice)
-            console.log(this.seller.minPrice)
+            // console.log(this.seller.deliveryPrice)
+            // console.log(this.seller.minPrice)
           }
         })
       }

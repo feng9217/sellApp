@@ -11,7 +11,10 @@
 </template>
 
 <script type="text/javascript">
+// 因为 remove 要做动画, 而且是二层动画, 所以另外起了个span, 对比Vue1.X中, 动画是直接在 tag中定义 transition="name", 在Vue2.X中, 使用了<transition>组件包裹了做动画的部分, 注意, 是包裹做动画的部分, 如 decrease做动画, 就是包裹整个decrease, 虽然实际变化的是inner部分
   import Vue from 'vue'
+  import eventBus from '../../common/js/eventBus.js'
+
   export default {
     props: {
       food: {
@@ -22,7 +25,7 @@
       // console.log(this.food)
     },
     methods: {
-      addToCart() {
+      addToCart(event) {
       // 两种情况 判断是否已存在
       // 不存在: 置为1
       // 存在: ++
@@ -36,6 +39,9 @@
         } else {
           this.food.count++
         }
+        // 把触发 addToCart 的对象传递给父组件
+        // console.log(event.target)
+        eventBus.$emit('cartAdded', event.target)
       },
       decreFromCart() {
         if (this.food.count) {

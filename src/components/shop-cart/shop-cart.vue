@@ -17,11 +17,58 @@
         </div>
       </div>
     </div>
+    <div class="ball-container">
+      <transition-group name="drop" tag="div"
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:after-enter="afterEnter">
+        <div :key="ball.index" class="ball" v-show="ball.show" v-for="ball in balls">
+          <div class="inner inner-hook"></div>
+        </div>
+      </transition-group>
+    </div>
   </div>
 </template>
 
 <script type="text/javascript">
+  import eventBus from '../../common/js/eventBus.js'
+
   export default {
+    data() {
+      return {
+        balls: [
+          {
+            show: false,
+            index: 0
+          },
+          {
+            show: false,
+            index: 1
+          },
+          {
+            show: false,
+            index: 2
+          },
+          {
+            show: false,
+            index: 3
+          },
+          {
+            show: false,
+            index: 4
+          }
+        ],
+        dropBalls: []
+      }
+    },
+    created() {
+      // console.log(this.balls)
+      eventBus.$on('cartAdded', target => {
+        // console.log('我接收到啦')
+        // console.log(target)
+        this.drop(target)
+      })
+    },
     props: {
       deliveryPrice: {
         type: Number,
@@ -73,6 +120,73 @@
           return 'not-enough'
         } else {
           return 'enough'
+        }
+      }
+    },
+    methods: {
+      drop(el) {
+        // 点击以后就会触发
+        // 把选到的小球.show 设为 true
+        // 并push进集合中
+        for (let i = 0; i < this.balls.length; i++) {
+          let ball = this.balls[i]
+          if (!ball.show) {
+            ball.show = true
+            ball.el = el
+            this.dropBalls.push(ball)
+            return
+          }
+        }
+      },
+      beforeEnter(el) {
+        // 把所有设为true的小球都找到
+        let count = this.balls.length
+        while (count--) {
+          let ball = this.balls[count]
+          if (ball.show) {
+            // 获取元素相对于视口位置
+            // 返回left 和 top 就是相对于视口的偏移
+            let rect = ball.el.getBoundingClientRect()
+            console.log(rect)
+            // 对应减少的 left 和 bottom 值
+            let x = rect.left - 32
+            let y = -(window.innerHeight - rect.top - 22)
+            // 设置初始位置 且初始化把 display 显示起来
+            // 外层做纵向 内层做横向 动画
+            el.style.display = ''
+            el.style.webkitTransform = `translate3D(0,${y}px,0)`
+            el.style.transform = `translate3D(0,${y}px,0)`
+            // 使用只供js选择用的 className: '....-hook'
+            // get Elements By ClassName
+            let inner = el.getElementsByClassName('inner-hook')[0]
+            // console.log(inner)
+            inner.style.webkitTransform = `translate3D(${x}px,0,0)`
+            inner.style.transform = `translate3D(${x}px,0,0)`
+          }
+        }
+      },
+      enter(el) {
+        // 触发浏览器重绘 且注释不让ES-lint检查
+        /* eslint-disable no-unused-vars */
+        let rf = el.offsetHeight
+        this.$nextTick(() => {
+          // 把样式全部重置
+          el.style.webkitTransform = 'translate3D(0,0,0)'
+          el.style.transform = 'translate3D(0,0,0)'
+          // 使用只供js选择用的 className: '....-hook'
+          // get Elements By ClassName
+          let inner = el.getElementsByClassName('inner-hook')[0]
+          // console.log(inner)
+          inner.style.webkitTransform = 'translate3D(0,0,0)'
+          inner.style.transform = 'translate3D(0,0,0)'
+        })
+      },
+      afterEnter(el) {
+        // 做完一次动画 就把show重置
+        let ball = this.dropBalls.shift()
+        if (ball) {
+          ball.show = false
+          el.style.display = 'none'
         }
       }
     }
@@ -169,4 +283,21 @@
           &.enough
             background: #00b43c
             color: #fff
+    .ball-container
+      .ball
+        // fixed 布局 相对于视口做动画的
+        position: fixed
+        left: 32px
+        bottom: 22px
+        z-index: 200
+        &.drop-enter-active, &.drop-leave-active
+          transition: all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
+          .inner
+            width: 16px
+            height: 16px
+            border-radius: 50%
+            background: rgb(0,160,220)
+        // 开始状态
+        &.drop-enter, &.drop-leave-to
+          transition: all 0.4s linear
 </style>
