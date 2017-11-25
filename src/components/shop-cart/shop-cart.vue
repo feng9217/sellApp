@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight':totalCount > 0}">
@@ -27,15 +27,39 @@
         </div>
       </transition-group>
     </div>
+    <transition name="fold">
+    <div class="shopcart-list" v-show="listShow">
+      <div class="list-header">
+        <h1 class="title">购物车</h1>
+        <span class="empty">清空</span>
+      </div>
+      <div class="list-content">
+        <ul>
+          <li class="food" v-for="food in selectFoods">
+            <span class="name">{{food.name}}</span>
+            <div class="price">
+              <span>¥{{food.price*food.count}}</span>
+            </div>
+            <div class="controlbut-wrapper">
+              <controlbut :food="food"></controlbut>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+    </transition>
   </div>
 </template>
 
 <script type="text/javascript">
   import eventBus from '../../common/js/eventBus.js'
+  import controlbut from '../controlbut/controlbut.vue'
 
   export default {
     data() {
       return {
+        // 因为可能连续点击 则需要若干个小球
+        // 加 index 是因为 transition-group 需要不同的 key 来识别
         balls: [
           {
             show: false,
@@ -58,7 +82,8 @@
             index: 4
           }
         ],
-        dropBalls: []
+        dropBalls: [],
+        fold: true
       }
     },
     created() {
@@ -121,6 +146,14 @@
         } else {
           return 'enough'
         }
+      },
+      listShow() {
+        if (!this.totalCount) {
+          this.fold = true
+          return false
+        }
+        let show = !this.fold
+        return show
       }
     },
     methods: {
@@ -138,6 +171,7 @@
           }
         }
       },
+      // 只需要 enter 这一段的动画效果
       beforeEnter(el) {
         // 把所有设为true的小球都找到
         let count = this.balls.length
@@ -147,12 +181,12 @@
             // 获取元素相对于视口位置
             // 返回left 和 top 就是相对于视口的偏移
             let rect = ball.el.getBoundingClientRect()
-            console.log(rect)
+            // console.log(rect)
             // 对应减少的 left 和 bottom 值
             let x = rect.left - 32
-            console.log(x)
+            // console.log(x)
             let y = -(window.innerHeight - rect.top - 22)
-            console.log(y)
+            // console.log(y)
             // 设置初始位置 且初始化把 display 显示起来
             // 外层做纵向 内层做横向 动画
             el.style.display = ''
@@ -190,7 +224,17 @@
           ball.show = false
           el.style.display = 'none'
         }
+      },
+      toggleList() {
+        // 控制展示与否
+        if (!this.totalCount) {
+          return
+        }
+        this.fold = !this.fold
       }
+    },
+    components: {
+      controlbut
     }
   }
 </script>
@@ -293,6 +337,7 @@
         bottom: 22px
         z-index: 200
         &.drop-enter, &.drop-enter-active
+          // 贝塞尔曲线 4个点定义抛物线的
           transition: all 0.4s cubic-bezier(0.49,-0.29,0.75,0.41)
           .inner
             width: 16px
@@ -305,4 +350,15 @@
         // 是因为 js钩子 与 这里的 enter enter-active 冲突了
         // &.drop-enter-active, &.drop-leave-active
         // &.drop-enter, &.drop-leave-to
+    .shopcart-list
+      position: absolute
+      left: 0
+      top: 0
+      z-index: -1
+      width: 100%
+      &.fold-enter-active, &.fold-leave-active
+        transition: all 0.5s
+        transform: translate3D(0,-100%,0)
+      &.fold-enter, &.fold-leave-to
+        transform: translate3D(0,0,0)
 </style>

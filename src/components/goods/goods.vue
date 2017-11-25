@@ -203,7 +203,7 @@
           if (res.errno === ERR_OK) {
             this.seller = res.data
             console.log('seller:')
-            // console.log(this.seller)
+            console.log(this.seller)
             // console.log(this.seller.deliveryPrice)
             // console.log(this.seller.minPrice)
           }
