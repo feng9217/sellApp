@@ -83,7 +83,8 @@
           }
         ],
         dropBalls: [],
-        fold: true
+        showFlag: false,
+        fold: false
       }
     },
     created() {
@@ -153,6 +154,7 @@
           return false
         }
         let show = !this.fold
+        // console.log(show)
         return show
       }
     },
@@ -231,6 +233,12 @@
           return
         }
         this.fold = !this.fold
+      },
+      show() {
+        this.showFlag = true
+      },
+      hide() {
+        this.showFlag = false
       }
     },
     components: {
@@ -240,6 +248,7 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/stylus/mixin.styl'
   .shopcart
     position: fixed
     left: 0
@@ -356,9 +365,51 @@
       top: 0
       z-index: -1
       width: 100%
+      overflow: auto
+      .list-header
+        height: 40px
+        line-height: 40px
+        padding: 0 18px
+        background: #f3f5f7
+        border-bottom: 1px solid rgba(7,17,27,0.1)
+        .title
+          float: left
+          font-size: 14px
+          color: rgb(7,17,27)
+        .empty
+          float: right
+          font-size: 12px
+          color: rgb(0,160,220)
+      .list-content
+        padding: 0 18px
+        max-heigth: 217px
+        overflow: hidden
+        background: #fff
+        .food
+          position: relative
+          padding: 12px
+          box-sizing: border-box
+          border-1px-bottom(rgba(7,17,27,0.1))
+          .name
+            line-height: 24px
+            font-size: 14px
+            color: rgb(7,17,27)
+          .price
+            position: absolute
+            right: 90px
+            bottom: 12px
+            line-height: 24px
+            font-size: 14px
+            font-weight: 700px
+            color: rgb(240,20,20)
+          .controlbut-wrapper
+            position: absolute
+            right: 0
+            bottom: 6px
       &.fold-enter-active, &.fold-leave-active
-        transition: all 0.5s
+        transition: all 2.3s
         transform: translate3D(0,-100%,0)
       &.fold-enter, &.fold-leave-to
+        transition: all 0.3s
         transform: translate3D(0,0,0)
 </style>
