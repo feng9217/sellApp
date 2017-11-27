@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content" @click="toggleList">
+    <div class="content" @click="showList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight':totalCount > 0}">
@@ -28,30 +28,33 @@
       </transition-group>
     </div>
     <transition name="fold">
-    <div class="shopcart-list" v-show="listShow">
-      <div class="list-header">
-        <h1 class="title">购物车</h1>
-        <span class="empty">清空</span>
+      <div class="shopcart-list" v-show="showFlag" @click="hideList">
+        <div class="list-wrapper" @click.stop>
+          <div class="list-header">
+            <h1 class="title">购物车</h1>
+            <span class="empty">清空</span>
+          </div>
+          <div class="list-content">
+            <ul>
+              <li class="food" v-for="food in selectFoods">
+                <span class="name">{{food.name}}</span>
+                <div class="price">
+                  <span>¥{{food.price*food.count}}</span>
+                </div>
+                <div class="controlbut-wrapper">
+                  <controlbut :food="food"></controlbut>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="list-content">
-        <ul>
-          <li class="food" v-for="food in selectFoods">
-            <span class="name">{{food.name}}</span>
-            <div class="price">
-              <span>¥{{food.price*food.count}}</span>
-            </div>
-            <div class="controlbut-wrapper">
-              <controlbut :food="food"></controlbut>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
     </transition>
   </div>
 </template>
 
 <script type="text/javascript">
+  // 删除寄存 3行  @click="toggleList" 31行 v-show="listShow"
   import eventBus from '../../common/js/eventBus.js'
   import controlbut from '../controlbut/controlbut.vue'
 
@@ -192,14 +195,14 @@
             // 设置初始位置 且初始化把 display 显示起来
             // 外层做纵向 内层做横向 动画
             el.style.display = ''
-            el.style.webkitTransform = `translate3D(0,${y}px,0)`
-            el.style.transform = `translate3D(0,${y}px,0)`
+            el.style.webkitTransform = `translate3d(0,${y}px,0)`
+            el.style.transform = `translate3d(0,${y}px,0)`
             // 使用只供js选择用的 className: '....-hook'
             // get Elements By ClassName
             let inner = el.getElementsByClassName('inner-hook')[0]
             // console.log(inner)
-            inner.style.webkitTransform = `translate3D(${x}px,0,0)`
-            inner.style.transform = `translate3D(${x}px,0,0)`
+            inner.style.webkitTransform = `translate3d(${x}px,0,0)`
+            inner.style.transform = `translate3d(${x}px,0,0)`
           }
         }
       },
@@ -209,14 +212,14 @@
         let rf = el.offsetHeight
         this.$nextTick(() => {
           // 把样式全部重置
-          el.style.webkitTransform = 'translate3D(0,0,0)'
-          el.style.transform = 'translate3D(0,0,0)'
+          el.style.webkitTransform = 'translate3d(0,0,0)'
+          el.style.transform = 'translate3d(0,0,0)'
           // 使用只供js选择用的 className: '....-hook'
           // get Elements By ClassName
           let inner = el.getElementsByClassName('inner-hook')[0]
           // console.log(inner)
-          inner.style.webkitTransform = 'translate3D(0,0,0)'
-          inner.style.transform = 'translate3D(0,0,0)'
+          inner.style.webkitTransform = 'translate3d(0,0,0)'
+          inner.style.transform = 'translate3d(0,0,0)'
         })
       },
       afterEnter(el) {
@@ -234,10 +237,14 @@
         }
         this.fold = !this.fold
       },
-      show() {
+      showList() {
+        if (!this.totalCount) {
+          console.log('shoplist还是空的 就不展开了')
+          return
+        }
         this.showFlag = true
       },
-      hide() {
+      hideList() {
         this.showFlag = false
       }
     },
@@ -360,56 +367,65 @@
         // &.drop-enter-active, &.drop-leave-active
         // &.drop-enter, &.drop-leave-to
     .shopcart-list
-      position: absolute
+      position: fixed
       left: 0
+      right: 0
       top: 0
+      bottom: 0
       z-index: -1
-      width: 100%
-      overflow: auto
-      .list-header
-        height: 40px
-        line-height: 40px
-        padding: 0 18px
-        background: #f3f5f7
-        border-bottom: 1px solid rgba(7,17,27,0.1)
-        .title
-          float: left
-          font-size: 14px
-          color: rgb(7,17,27)
-        .empty
-          float: right
-          font-size: 12px
-          color: rgb(0,160,220)
-      .list-content
-        padding: 0 18px
-        max-heigth: 217px
-        overflow: hidden
-        background: #fff
-        .food
-          position: relative
-          padding: 12px
-          box-sizing: border-box
-          border-1px-bottom(rgba(7,17,27,0.1))
-          .name
-            line-height: 24px
+      &.fold-enter-active, &.fold-leave-active
+        transition: all 1.5s
+        opacity: 1
+        // transform: translate3d(0,-100%,0)
+      &.fold-enter, &.fold-leave-to
+        transition: all 1.5s
+        opacity: 0.2
+        // transform: translate3d(0,0,0)
+      .list-wrapper
+        position: absolute
+        left: 0
+        bottom: 48px
+        width: 100%
+        z-index: -1
+        .list-header
+          height: 40px
+          line-height: 40px
+          padding: 0 18px
+          background: #f3f5f7
+          border-bottom: 1px solid rgba(7,17,27,0.1)
+          .title
+            float: left
             font-size: 14px
             color: rgb(7,17,27)
-          .price
-            position: absolute
-            right: 90px
-            bottom: 12px
-            line-height: 24px
-            font-size: 14px
-            font-weight: 700px
-            color: rgb(240,20,20)
-          .controlbut-wrapper
-            position: absolute
-            right: 0
-            bottom: 6px
-      &.fold-enter-active, &.fold-leave-active
-        transition: all 2.3s
-        transform: translate3D(0,-100%,0)
-      &.fold-enter, &.fold-leave-to
-        transition: all 0.3s
-        transform: translate3D(0,0,0)
+          .empty
+            float: right
+            font-size: 12px
+            color: rgb(0,160,220)
+        .list-content
+          padding: 0 18px
+          max-height: 217px
+          overflow: hidden
+          background: #fff
+          overflow: auto
+          .food
+            position: relative
+            padding: 12px
+            box-sizing: border-box
+            border-1px-bottom(rgba(7,17,27,0.1))
+            .name
+              line-height: 24px
+              font-size: 14px
+              color: rgb(7,17,27)
+            .price
+              position: absolute
+              right: 90px
+              bottom: 12px
+              line-height: 24px
+              font-size: 14px
+              font-weight: 700px
+              color: rgb(240,20,20)
+            .controlbut-wrapper
+              position: absolute
+              right: 0
+              bottom: 6px
 </style>
