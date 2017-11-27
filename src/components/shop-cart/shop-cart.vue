@@ -54,9 +54,13 @@
 </template>
 
 <script type="text/javascript">
-  // 删除寄存 3行  @click="toggleList" 31行 v-show="listShow"
+  // 关于 transition 动画方面
+  // translate3d(x,y,z) 值为100%就是运动整个元素的宽/高
+  // 而且设在 -enter, -leave-to 尤佳
+  // -enter -leave-to 就是动画开始前/结束后的元素状态
   import eventBus from '../../common/js/eventBus.js'
   import controlbut from '../controlbut/controlbut.vue'
+  import scroll from '../scroll/scroll.vue'
 
   export default {
     data() {
@@ -86,8 +90,8 @@
           }
         ],
         dropBalls: [],
-        showFlag: false,
-        fold: false
+        showFlag: false
+        // fold: false
       }
     },
     created() {
@@ -150,16 +154,16 @@
         } else {
           return 'enough'
         }
-      },
-      listShow() {
-        if (!this.totalCount) {
-          this.fold = true
-          return false
-        }
-        let show = !this.fold
-        // console.log(show)
-        return show
       }
+      // listShow() {
+      //   if (!this.totalCount) {
+      //     this.fold = true
+      //     return false
+      //   }
+      //   let show = !this.fold
+      //   // console.log(show)
+      //   return show
+      // }
     },
     methods: {
       drop(el) {
@@ -230,13 +234,13 @@
           el.style.display = 'none'
         }
       },
-      toggleList() {
-        // 控制展示与否
-        if (!this.totalCount) {
-          return
-        }
-        this.fold = !this.fold
-      },
+      // toggleList() {
+      //   // 控制展示与否
+      //   if (!this.totalCount) {
+      //     return
+      //   }
+      //   this.fold = !this.fold
+      // },
       showList() {
         if (!this.totalCount) {
           console.log('shoplist还是空的 就不展开了')
@@ -249,13 +253,15 @@
       }
     },
     components: {
-      controlbut
+      controlbut,
+      scroll
     }
   }
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
   @import '../../common/stylus/mixin.styl'
+
   .shopcart
     position: fixed
     left: 0
@@ -380,7 +386,7 @@
       &.fold-enter, &.fold-leave-to
         transition: all 1.5s
         opacity: 0.2
-        // transform: translate3d(0,0,0)
+        transform: translate3d(0,100%,0)
       .list-wrapper
         position: absolute
         left: 0
