@@ -12,7 +12,7 @@
         <div class="desc">另需配送费¥{{deliveryPrice}}元</div>
       </div>
       <div class="content-right">
-        <div class="pay" :class="payClass">
+        <div class="pay" :class="payClass" @click.stop="paybill">
           {{payDesc}}
         </div>
       </div>
@@ -32,7 +32,7 @@
         <div class="list-wrapper" @click.stop>
           <div class="list-header">
             <h1 class="title">购物车</h1>
-            <span class="empty">清空</span>
+            <span class="empty" @click="empty">清空</span>
           </div>
           <div class="list-content">
             <ul>
@@ -250,6 +250,19 @@
       },
       hideList() {
         this.showFlag = false
+      },
+      empty() {
+        // 把所以计数都置为 0
+        this.selectFoods.forEach((food) => {
+          food.count = 0
+        })
+        this.showFlag = false
+      },
+      paybill() {
+        if (this.totalPrice < this.minPrice) {
+          return
+        }
+        window.alert(`成功支付¥${this.totalPrice}元,等待商家确认ヾ(๑╹◡╹)ﾉ"`)
       }
     },
     components: {
@@ -274,6 +287,7 @@
       background: #141d27
       font-size: 0
       color: rgba(255,255,255,0.4)
+      z-index: 100
       .content-left
         flex: 1
         .logo-wrapper
@@ -379,12 +393,13 @@
       top: 0
       bottom: 0
       z-index: -1
+      background: rgba(7,17,27,0.6)
+      backdrop-filter: blur(10px)
+      transition: all 1s
       &.fold-enter-active, &.fold-leave-active
-        transition: all 1.5s
         opacity: 1
         // transform: translate3d(0,-100%,0)
       &.fold-enter, &.fold-leave-to
-        transition: all 1.5s
         opacity: 0.2
         transform: translate3d(0,100%,0)
       .list-wrapper
@@ -392,7 +407,7 @@
         left: 0
         bottom: 48px
         width: 100%
-        z-index: -1
+        z-index: 10
         .list-header
           height: 40px
           line-height: 40px
