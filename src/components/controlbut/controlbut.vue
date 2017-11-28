@@ -1,5 +1,5 @@
 <template>
-  <div class="controlbut">
+  <div class="controlbut" @click.stop>
     <transition name="move">
     <div class="decrease" v-show="food.count>0" @click="decreFromCart">
       <span class="inner icon-remove_circle_outline"></span>

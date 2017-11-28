@@ -17,7 +17,7 @@
         <li class="food-list" v-for="item in goods" ref="foodListGroup">
           <h1 class="title">{{item.name}}</h1>
           <ul>
-            <li v-for="food in item.foods" class="food-item" border-1px-bottom>
+            <li v-for="food in item.foods" class="food-item" @click="selectFoodItem(food)" border-1px-bottom>
               <div class="icon">
                 <img :src="food.icon" width="57" height="57">
               </div>
@@ -41,6 +41,7 @@
     </div>
     </scroll>
     <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+    <food-detail :food="selectedItem" ref="foodDetail"></food-detail>
   </div>
 </template>
 
@@ -72,6 +73,7 @@
   import {getData} from '../../common/js/dom.js'
   import shopcart from '../shop-cart/shop-cart.vue'
   import controlbut from '../controlbut/controlbut.vue'
+  import foodDetail from '../food/food.vue'
 
   const ERR_OK = 0
 
@@ -87,7 +89,8 @@
         // food列表每个区间高度
         listHeight: [],
         scrollY: -1,
-        seller: {}
+        seller: {},
+        selectedItem: {}
       }
     },
     created() {
@@ -208,6 +211,11 @@
             // console.log(this.seller.minPrice)
           }
         })
+      },
+      selectFoodItem(food) {
+        this.selectedItem = food
+        console.log(this.selectedItem)
+        this.$refs.foodDetail.show()
       }
     },
     watch: {
@@ -231,7 +239,8 @@
     components: {
       Scroll,
       shopcart,
-      controlbut
+      controlbut,
+      foodDetail
     }
   }
 </script>
@@ -260,11 +269,9 @@
         line-height: 14px
         font-size: 0
         padding: 0 12px
-        z-index: 1
         &.current
           font-weight: 700px
           position: relative
-          z-index: 10
           margin-top: -1px
           background: #fff
           .text

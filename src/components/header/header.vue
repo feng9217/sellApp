@@ -228,7 +228,6 @@ export default {
       left: 0
       top: 0
       width: 100%
-      z-index: -1
       // 滤镜产生模糊效果
       filter: blur(10px)
     .detail
@@ -237,7 +236,6 @@ export default {
       // 不跳转路由 只是使用 z-index 遮挡
       top: 0
       left: 0
-      z-index: 100
       width: 100%
       height: 100%
       overflow: auto
@@ -246,12 +244,12 @@ export default {
       backdrop-filter: blur(10px)
       // 动画定义
       &.fade-enter-active, &.fade-leave-active
-        transition: all 3.5s
+        transition: all 1.5s
         opcity: 0.8
         background: rgba(7,17,27,0.8)
       &.fade-enter, &.fade-leave-to
-        opcity: 0.2
-        background: rgba(7,17,27,0.2)
+        transition: all 1.5s
+        background: rgba(7,17,27,0)
       // sticky footer
       // 当页面内容不够长的时候 页脚块粘贴在视窗底部
       // 当内容足够长的时候 页脚块会被向下推送

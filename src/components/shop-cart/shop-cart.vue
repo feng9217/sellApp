@@ -407,7 +407,6 @@
         left: 0
         bottom: 48px
         width: 100%
-        z-index: 10
         .list-header
           height: 40px
           line-height: 40px
