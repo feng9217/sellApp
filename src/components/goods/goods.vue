@@ -270,10 +270,12 @@
         font-size: 0
         padding: 0 12px
         &.current
-          font-weight: 700px
           position: relative
+          // current样式是根据scrollY变化的 相当于一个浮于上方的遮层
+          z-index: 10
           margin-top: -1px
           background: #fff
+          font-weight: 700px
           .text
             border-none()
         // 因为是display:table的关系 所以一起丢进span.text中

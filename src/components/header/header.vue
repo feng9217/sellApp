@@ -120,10 +120,10 @@ export default {
     overflow: hidden
     background: rgba(7,17,27,0.5)
     .content-wrapper
+      position: relative
       padding: 24px 12px 18px 24px
       // 给父元素加上 font-size: 0 消除子元素的空白间隙
       font-size: 0
-      position: relative
       .avatar
         display: inline-block
         vertical-align: top
@@ -228,12 +228,16 @@ export default {
       left: 0
       top: 0
       width: 100%
+      // height: 100%
+      // 背景层 压在下面的
+      z-index: -1
       // 滤镜产生模糊效果
       filter: blur(10px)
     .detail
       position: fixed
       // 务必记得加上定位 不然不会是整屏的
       // 不跳转路由 只是使用 z-index 遮挡
+      z-index: 100
       top: 0
       left: 0
       width: 100%
@@ -242,13 +246,13 @@ export default {
       background: rgba(7,17,27,0.8)
       // IOS下的背景模糊效果
       backdrop-filter: blur(10px)
+      transition: all 1.5s
       // 动画定义
       &.fade-enter-active, &.fade-leave-active
-        transition: all 1.5s
-        opcity: 0.8
+        opacity: 1
         background: rgba(7,17,27,0.8)
       &.fade-enter, &.fade-leave-to
-        transition: all 1.5s
+        opacity: 0
         background: rgba(7,17,27,0)
       // sticky footer
       // 当页面内容不够长的时候 页脚块粘贴在视窗底部
@@ -278,6 +282,7 @@ export default {
           .title
             display: flex
             width: 80%
+            // 水平居中
             margin 28px auto 24px auto
             .line
               flex: 1

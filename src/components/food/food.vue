@@ -56,6 +56,7 @@
 <style scoped lang="stylus" rel="stylesheet/stylus">
   .food
     position: fixed
+    z-index: 30
     left: 0
     top: 0
     right: 0

@@ -279,7 +279,8 @@
     position: fixed
     left: 0
     bottom: 0
-    z-index: 100
+    // 需要购物车遮挡住 good层
+    z-index: 50
     width: 100%
     height: 48px
     .content
@@ -287,18 +288,20 @@
       background: #141d27
       font-size: 0
       color: rgba(255,255,255,0.4)
-      z-index: 100
+      // 左边自适应布局 右边固定宽度
       .content-left
         flex: 1
         .logo-wrapper
           display: inline-block
           font-size: 24px
+          // 使用定位超出父元素
           position: relative
           top: -10px
           margin: 0 12px
           padding: 6px
           width: 56px
           height: 56px
+          // 使 width 包括 border+padding+内容宽
           box-sizing: border-box
           vertical-align: top
           border-radius: 50%
@@ -393,6 +396,7 @@
       top: 0
       bottom: 0
       z-index: -1
+      width: 100%
       background: rgba(7,17,27,0.6)
       backdrop-filter: blur(10px)
       transition: all 1s
@@ -407,6 +411,7 @@
         left: 0
         bottom: 48px
         width: 100%
+        z-index: 40
         .list-header
           height: 40px
           line-height: 40px
