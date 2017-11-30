@@ -41,7 +41,7 @@
     </div>
     </scroll>
     <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
-    <food-detail :food="selectedItem" ref="foodDetail"></food-detail>
+    <food-detail v-if="selectedItem.name" :food="selectedItem" ref="foodDetail"></food-detail>
   </div>
 </template>
 
@@ -163,8 +163,12 @@
       // 不费那功夫了 直接把封装好的 scroll 组件拿来用
       // _initScroll() {
       // }
+      // ---------
+      // 获取li中的index值 使用better-scroll的方法scrollToElement滚动到相应位置
       onMenuTouchStart(el) {
         let anchorIndex = getData(el.path[1], 'index')
+        // el 是span 而index是存在li中的
+        // console.log(el)
         // console.log(el.target)
         // console.log(anchorIndex)
         this.$refs.foodsWrapper.scrollToElement(this.$refs.foodListGroup[anchorIndex], 0)
@@ -193,10 +197,13 @@
         this.scrollY = Math.abs(Math.round(pos.y))
         // console.log(this.scrollY)
       },
+      // 点击左侧menu 右侧直接跳转到相应分类
       selectItem(index) {
         console.log(index)
+        // console.log(this.listHeight[index])
+        // 修正 listHeight[1]高度过小 不能正确高亮的问题
         if (index >= 1 && index < 2) {
-          this.scrollY = this.listHeight[index]
+          this.scrollY = 1190
         } else {
           this.scrollY = this.listHeight[index - 1]
         }
@@ -215,7 +222,10 @@
       selectFoodItem(food) {
         this.selectedItem = food
         console.log(this.selectedItem)
-        this.$refs.foodDetail.show()
+        // 先让数据渲染 才能调用方法 不然是undefined的
+        this.$nextTick(() => {
+          this.$refs.foodDetail.show()
+        })
       }
     },
     watch: {
