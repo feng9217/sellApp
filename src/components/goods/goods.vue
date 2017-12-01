@@ -221,7 +221,7 @@
       },
       selectFoodItem(food) {
         this.selectedItem = food
-        console.log(this.selectedItem)
+        // console.log(this.selectedItem)
         // 先让数据渲染 才能调用方法 不然是undefined的
         this.$nextTick(() => {
           this.$refs.foodDetail.show()

@@ -33,10 +33,27 @@
       <div class="rating">
         <h1 class="title">商品评价</h1>
         <ratingselect
-        :selectType="selectType"
-        :onlyContent="onlyContent"
         :desc="desc"
-        :ratings="food.ratings"></ratingselect>
+        :ratings="food.ratings"
+        @changeSelectType="changeSelectType(type)"
+        @toggle="selectToggle(flag)"></ratingselect>
+        <div class="rating-wrapper">
+          <ul v-show="food.ratings && food.ratings.length">
+            <li
+            class="rating-item"
+            v-for="rating in food.ratings">
+              <div class="user">
+                <span class="name">{{rating.username}}</span>
+                <img class="avatar" width="12" height="12" :src="rating.avatar"></img>
+              </div>
+              <div class="time">{{rating.rateTime | formatDate}}</div>
+              <p class="comment">
+                <span :class="{'icon-thumb_up':rating.rateType===0,'icon-thumb_down':rating.rateType===1}"></span>{{rating.text}}
+              </p>
+            </li>
+          </ul>
+          <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+        </div>
       </div>
     </div>
   </scroll>
@@ -49,6 +66,12 @@
   // ------
   // question: 使用 better-scroll 并不能使组件滚动
   // solution: 因为food组件 是被show()控制的 在刚开始就被渲染出来了, 所以组件刚开始渲染的高度并不是传入数据后的高度
+  // 1.首先, 在good组件中, 选择要传递的food后加入一个延时再调用 food.show() 方法, 确保数据完成渲染
+  // 2.在组件处加入 v-if 限制, 确保刚开始即使不显示, 也不会跟着good一起渲染出来
+  // 3.在show()中添加 better-scroll.refresh() 确保渲染后的高度正确
+  // ------
+  // question: 滚动后带来一个问题, shopcart层是一直在上的, 部分内容会被遮挡
+  // solution: 如 head的detail页 为页面设置一个略高于 shopcart的padding, 但是, 因为.food用于scroll, 所以添加在.food-content上, 才确保功能正常实现
   import scroll from '../scroll/scroll.vue'
   // 从Element中看到被scroll包裹的第一个子元素出现各种参数后, 就说明使用成功了
   import controlbut from '../controlbut/controlbut.vue'
@@ -57,10 +80,13 @@
   import split from '../split/split.vue'
   import ratingselect from '../ratingselect/ratingselect.vue'
   // import BScroll from 'better-scroll'
+  import {formatDate} from '../../common/js/util.js'
 
   // const POSITIVE = 0
   // const NEGATIVE = 1
-  const ALL = 2
+  // const ALL = 2
+
+  // 自定义一个filter, vue2.0中使用Vue.filter('name', function)定义, 是全局的
 
   export default {
     created() {
@@ -84,7 +110,7 @@
     data() {
       return {
         showFlag: false,
-        selectType: ALL,
+        selectType: 2,
         onlyContent: true,
         desc: {
           all: '全部',
@@ -105,8 +131,8 @@
           this.$refs.foodWrapper.refresh()
         }, 20)
         // 初始化数据
-        this.selectType = ALL
-        this.onlyContent = true
+        // this.selectType = ALL
+        // this.onlyContent = true
       },
       hide() {
         this.showFlag = false
@@ -119,6 +145,25 @@
         Vue.set(this.food, 'count', 1)
         // 并且通过 EventBus 传递事件触发动画
         eventBus.$emit('cartAdded', event.target)
+      },
+      // 和子组件 ratingselect 样式相关联
+      // v-show = "needShow(rating.rateType, rating.text)"
+      changeSelectType(type) {
+        console.log('我收到啦1')
+        this.selectType = type
+        console.log(this.selectType)
+      },
+      selectToggle(flag) {
+        console.log('我收到啦2')
+        this.onlyContent = flag
+        console.log(this.onlyContent)
+      }
+    },
+    filters: {
+      // 使用正则定义一个 filter方法
+      formatDate(time) {
+        let date = new Date(time)
+        return formatDate(date, 'yyyy-MM-DD hh:mm')
       }
     },
     components: {
@@ -131,6 +176,8 @@
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
+  @import '../../common/stylus/mixin.styl'
+
   .food
     position: fixed
     left: 0
@@ -251,4 +298,46 @@
         font-size: 14px
         font-weight: 700
         color: rgb(7,17,27)
+      .rating-wrapper
+        padding: 0 18px
+        .rating-item
+          position: relative
+          padding: 16px 0
+          border-1px-bottom(rgba(7,17,27,0.3))
+          // 头像+ID定位到右上角
+          .user
+            position: absolute
+            right: 0
+            // padding并不影响定位 所以还是要设位置
+            top: 16px
+            line-height: 12px
+            font-size: 0
+            .name
+              display: inline-block
+              margin-right: 6px
+              vertical-align: top
+              font-size: 10px
+              color: rgb(147,153,159)
+            .avatar
+              border-radius: 50%
+          .time
+            margin-bottom: 6px
+            line-height: 12px
+            font-size: 10px
+            color: rgb(147,153,159)
+          .comment
+            line-height: 16px
+            font-size: 12px
+            color: rgb(7,17,27)
+            .icon-thumb_up, .icon-thumb_down
+              margin-right: 4px
+              line-height: 24px
+            .icon-thumb_up
+              color: rgb(0,160,220)
+            .icon-thumb_down
+              color: rgb(147,153,159)
+        .no-rating
+          padding: 16px
+          font-size: 12px
+          color: rgb(147,153,159)
 </style>
