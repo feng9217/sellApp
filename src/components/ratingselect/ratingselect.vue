@@ -54,12 +54,12 @@
       select(type) {
         this.selectType = type
         this.$emit('changeSelectType', this.selectType)
-        console.log('我传事件啦1')
+        // console.log('我传事件啦1')
       },
       toggleContent() {
         this.onlyContent = !this.onlyContent
         this.$emit('toggle', this.onlyContent)
-        console.log('我传事件啦2')
+        // console.log('我传事件啦2')
       }
     },
     computed: {

@@ -35,13 +35,14 @@
         <ratingselect
         :desc="desc"
         :ratings="food.ratings"
-        @changeSelectType="changeSelectType(type)"
-        @toggle="selectToggle(flag)"></ratingselect>
+        @changeSelectType="changeSelectType"
+        @toggle="selectToggle"></ratingselect>
         <div class="rating-wrapper">
           <ul v-show="food.ratings && food.ratings.length">
             <li
             class="rating-item"
-            v-for="rating in food.ratings">
+            v-for="rating in food.ratings"
+            v-show = "needShow(rating.rateType, rating.text)">
               <div class="user">
                 <span class="name">{{rating.username}}</span>
                 <img class="avatar" width="12" height="12" :src="rating.avatar"></img>
@@ -72,6 +73,13 @@
   // ------
   // question: 滚动后带来一个问题, shopcart层是一直在上的, 部分内容会被遮挡
   // solution: 如 head的detail页 为页面设置一个略高于 shopcart的padding, 但是, 因为.food用于scroll, 所以添加在.food-content上, 才确保功能正常实现
+  // ------
+  // question: 使用 props传值后 在子组件中对该值进行修改, 如selectType, onlyContent, 虽然 food 和 ratingselect组件中都使用到没错, 但Vue会提示Warning: Avoid mutating a prop directly since the value will be overwritten whenever the parent component re-renders. Instead, use a data or computed property based on the prop's value.
+  // solution: 改成每个组件都单独定义, 单独使用, ratingselect值的变化通过 $emit 传递出来给food组件监听并更新, 如: 在ratingselect中, this.$emit('changeSelectType', this.selectType) 接着在 Food中, @changeSelectType="changeSelectType" 并定义method:
+  // changeSelectType(type) {
+  //   this.selectType = type
+  //   console.log(this.selectType)
+  // },
   import scroll from '../scroll/scroll.vue'
   // 从Element中看到被scroll包裹的第一个子元素出现各种参数后, 就说明使用成功了
   import controlbut from '../controlbut/controlbut.vue'
@@ -84,7 +92,7 @@
 
   // const POSITIVE = 0
   // const NEGATIVE = 1
-  // const ALL = 2
+  const ALL = 2
 
   // 自定义一个filter, vue2.0中使用Vue.filter('name', function)定义, 是全局的
 
@@ -110,7 +118,7 @@
     data() {
       return {
         showFlag: false,
-        selectType: 2,
+        selectType: ALL,
         onlyContent: true,
         desc: {
           all: '全部',
@@ -146,17 +154,42 @@
         // 并且通过 EventBus 传递事件触发动画
         eventBus.$emit('cartAdded', event.target)
       },
+      // 实现评价列表选择显示功能
       // 和子组件 ratingselect 样式相关联
-      // v-show = "needShow(rating.rateType, rating.text)"
+      // 也可以使用 vue 2.3+ 的语法糖 .sync
+      // 不要在 DOM 上的 @子组件方法="method" method上传值 ......
       changeSelectType(type) {
-        console.log('我收到啦1')
+        // console.log('我收到啦1')
         this.selectType = type
         console.log(this.selectType)
+        this.$nextTick(() => {
+          this.$refs.foodWrapper.refresh()
+        })
       },
       selectToggle(flag) {
-        console.log('我收到啦2')
+        // console.log('我收到啦2')
         this.onlyContent = flag
         console.log(this.onlyContent)
+        // 显示内容变了 需要重新计算下高度
+        // 而且要加个延时才能保证可以正确渲染
+        this.$nextTick(() => {
+          this.$refs.foodWrapper.refresh()
+        })
+      },
+      needShow(type, text) {
+        // 判断是否要显示内容
+        // 要显示内容但没有内容 则return false
+        if (this.onlyContent && !text) {
+          return false
+        }
+        // 需要显示内容 且 有内容的情况下
+        // 则判断选择类型
+        // 选择类型和数据评价类型一致才能显示
+        if (this.selectType === ALL) {
+          return true
+        } else {
+          return type === this.selectType
+        }
       }
     },
     filters: {
