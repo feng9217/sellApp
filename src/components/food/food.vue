@@ -33,10 +33,10 @@
       <div class="rating">
         <h1 class="title">商品评价</h1>
         <ratingselect
-        :desc="desc"
-        :ratings="food.ratings"
-        @changeSelectType="changeSelectType"
-        @toggle="selectToggle"></ratingselect>
+          :desc="desc"
+          :ratings="food.ratings"
+          @changeSelectType="changeSelectType"
+          @toggle="selectToggle"></ratingselect>
         <div class="rating-wrapper">
           <ul v-show="food.ratings && food.ratings.length">
             <li
@@ -132,8 +132,8 @@
         if (!this.food) {
           return
         }
-        console.log(`food:`)
-        console.log(this.food)
+        // console.log(`food:`)
+        // console.log(this.food)
         this.showFlag = true
         setTimeout(() => {
           this.$refs.foodWrapper.refresh()
@@ -161,7 +161,7 @@
       changeSelectType(type) {
         // console.log('我收到啦1')
         this.selectType = type
-        console.log(this.selectType)
+        // console.log(this.selectType)
         this.$nextTick(() => {
           this.$refs.foodWrapper.refresh()
         })
@@ -169,7 +169,7 @@
       selectToggle(flag) {
         // console.log('我收到啦2')
         this.onlyContent = flag
-        console.log(this.onlyContent)
+        // console.log(this.onlyContent)
         // 显示内容变了 需要重新计算下高度
         // 而且要加个延时才能保证可以正确渲染
         this.$nextTick(() => {

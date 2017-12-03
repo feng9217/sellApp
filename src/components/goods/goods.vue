@@ -153,9 +153,9 @@
       _getGoodsData() {
         getGoodsData().then((res) => {
           if (res.errno === ERR_OK) {
-            console.log('goods:')
+            // console.log('goods:')
             this.goods = res.data
-            console.log(this.goods)
+            // console.log(this.goods)
           }
         })
       },
@@ -212,8 +212,8 @@
         getSellerData().then((res) => {
           if (res.errno === ERR_OK) {
             this.seller = res.data
-            console.log('seller:')
-            console.log(this.seller)
+            // console.log('seller:')
+            // console.log(this.seller)
             // console.log(this.seller.deliveryPrice)
             // console.log(this.seller.minPrice)
           }

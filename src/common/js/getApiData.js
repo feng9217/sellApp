@@ -13,3 +13,10 @@ export function getGoodsData() {
     return Promise.resolve(res.data)
   })
 }
+
+export function getRatingsData() {
+  const url = '/api/ratings'
+  return axios.get(url).then((res) => {
+    return Promise.resolve(res.data)
+  })
+}
