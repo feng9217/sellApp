@@ -31,7 +31,7 @@
         @toggle="selectToggle"></ratingselect>
       <div class="rating-wrapper">
         <ul>
-          <li class="rating-item" v-for="rating in ratings">
+          <li class="rating-item" v-for="rating in ratings" v-show = "needShow(rating.rateType, rating.text)">
             <div class="avatar">
               <img :src="rating.avatar" width="28" height="28">
             </div>
@@ -60,6 +60,7 @@
 <script type="text/javascript">
   // 分区块: 整体介绍 + ratingselect组件 + 评价列表
   // 此处评价列表和 food页的是同组件 只是传入的数据不同
+  // needShow也是可以直接复用的 两个组件重复的地方 还可以直接 mixin
   import scroll from '../scroll/scroll.vue'
   import {getSellerData, getRatingsData} from '../../common/js/getApiData.js'
   import star from '../star-score/star-score.vue'
@@ -114,6 +115,21 @@
         this.$nextTick(() => {
           this.$refs.ratingsWrapper.refresh()
         })
+      },
+      needShow(type, text) {
+        // 判断是否要显示内容
+        // 要显示内容但没有内容 则return false
+        if (this.onlyContent && !text) {
+          return false
+        }
+        // 需要显示内容 且 有内容的情况下
+        // 则判断选择类型
+        // 选择类型和数据评价类型一致才能显示
+        if (this.selectType === ALL) {
+          return true
+        } else {
+          return type === this.selectType
+        }
       }
     },
     filters: {
