@@ -3,7 +3,7 @@
     <v-header></v-header>
     <tab></tab>
     <keep-alive>
-      <router-view/>
+      <router-view :seller="seller"/>
     </keep-alive>
   </div>
 </template>
@@ -11,13 +11,35 @@
 <script>
 import header from './components/header/header.vue'
 import Tab from './components/tab/tab.vue'
+import {getSellerData} from './common/js/getApiData.js'
+
+const ERR_OK = 0
 
 export default {
   name: 'app',
+  data() {
+    return {
+      seller: {}
+    }
+  },
+  mounted() {
+    this._getSellerData()
+  },
   components: {
     // 不能直接使用header 和原生的 h5标签 冲突
     'v-header': header,
     Tab
+  },
+  methods: {
+    _getSellerData() {
+      getSellerData().then((res) => {
+        if (res.errno === ERR_OK) {
+          this.seller = res.data
+          console.log('seller:')
+          console.log(this.seller)
+        }
+      })
+    }
   }
 }
 </script>

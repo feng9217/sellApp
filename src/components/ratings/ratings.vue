@@ -61,8 +61,10 @@
   // 分区块: 整体介绍 + ratingselect组件 + 评价列表
   // 此处评价列表和 food页的是同组件 只是传入的数据不同
   // needShow也是可以直接复用的 两个组件重复的地方 还可以直接 mixin
+  // -----
+  // 更改 seller 的获取 从router-view传值
   import scroll from '../scroll/scroll.vue'
-  import {getSellerData, getRatingsData} from '../../common/js/getApiData.js'
+  import {getRatingsData} from '../../common/js/getApiData.js'
   import star from '../star-score/star-score.vue'
   import split from '../split/split.vue'
   import ratingselect from '../ratingselect/ratingselect.vue'
@@ -74,27 +76,35 @@
   export default {
     data() {
       return {
-        seller: {},
+        // seller: {},
         showFlag: false,
         selectType: ALL,
         onlyContent: true,
         ratings: []
       }
     },
+    props: {
+      seller: {
+        type: Object,
+        default() {
+          return {}
+        }
+      }
+    },
     mounted() {
-      this._getSellerData()
+      // this._getSellerData()
       this._getRatingsData()
     },
     methods: {
-      _getSellerData() {
-        getSellerData().then((res) => {
-          if (res.errno === ERR_OK) {
-            this.seller = res.data
-            // console.log('seller:')
-            // console.log(this.seller)
-          }
-        })
-      },
+      // _getSellerData() {
+      //   getSellerData().then((res) => {
+      //     if (res.errno === ERR_OK) {
+      //       this.seller = res.data
+      //       // console.log('seller:')
+      //       // console.log(this.seller)
+      //     }
+      //   })
+      // },
       _getRatingsData() {
         getRatingsData().then((res) => {
           if (res.errno === ERR_OK) {
