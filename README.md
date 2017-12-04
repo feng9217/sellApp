@@ -18,7 +18,16 @@ npm run build
 npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).  
+
+头部组件和good页部分演示:  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/headerAndgoodsDemo.gif)   
+
+good页功能演示:  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/goodsDemo.gif)   
+
+ratings评价页演示:  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/ratings.gif)   
 
 <h1>准备事项</h1>  
 
