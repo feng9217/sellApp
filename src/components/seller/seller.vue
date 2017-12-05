@@ -220,6 +220,8 @@
         right: 18px
         top: 18px
         text-align: center
+        // 限制宽度 防止抖动
+        width: 36px
         .icon-favorite
           display: block
           margin-bottom: 4px

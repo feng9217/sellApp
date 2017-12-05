@@ -12,6 +12,7 @@
 import header from './components/header/header.vue'
 import Tab from './components/tab/tab.vue'
 import {getSellerData} from './common/js/getApiData.js'
+import {urlParse} from './common/js/util.js'
 
 const ERR_OK = 0
 
@@ -19,7 +20,20 @@ export default {
   name: 'app',
   data() {
     return {
-      seller: {}
+      seller: {
+        // 添加立即执行函数 在URL中添加商家对应ID
+        // http://localhost:8080/goods?id=12345/seller
+        id: (() => {
+          let queryParam = urlParse()
+          console.log(queryParam)
+          return queryParam.id
+        })()
+        // 其实可以在 vue-router 跳转到商家页的时候传递参数
+        // 使用 this.$router.push({
+        //        path: `/seller/${seller.id}`
+        //      })
+        // 执行 this.setSeller(seller) 使用vuex管理
+      }
     }
   },
   mounted() {
