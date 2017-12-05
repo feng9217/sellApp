@@ -16,7 +16,6 @@ npm run build
 
 # build for production and view the bundle analyzer report
 npm run build --report
-```
 
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).  
 
@@ -31,6 +30,9 @@ good页中的food组件详情功能演示:
 
 ratings评价页演示:  
 ![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/ratings.gif)  
+
+seller商家信息页演示:  
+![image]()  
 
 <h1>准备事项</h1>  
 
@@ -60,6 +62,9 @@ PS: 移动端记得添加视口
 header + 导航区 + 内容区(goods + ratings + seller)  
 内容区的切换基于 vue-router 来实现  
   
+<h2>数据获取</h2>  
+因为内容区(goods + ratings + seller)的三个组件都使用到了 seller数据, 所以统一在APP页获取后经 router-view来进行对子组件的传递(由 props 获取), 避免重复请求数据  
+  
 ***
 <h2>header组件</h2>  
   
@@ -69,6 +74,10 @@ header + 导航区 + 内容区(goods + ratings + seller)
   
 <h3>结构划分</h3>  
 总共划分了四个部分: content-wrapper商家信息部分 / board-wrapper公告部分 / background背景模糊区域 / detail详细信息层部分  
-
-
+  
+<h2>goods组件</h2>  
+  
+<h2>ratings组件</h2>  
+  
+<h2>seller组件</h2>  
 

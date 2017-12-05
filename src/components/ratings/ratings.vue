@@ -1,5 +1,5 @@
 <template>
-  <scroll class="ratings" v-if="seller.score" ref="ratingsWrapper">
+  <scroll class="ratings" v-if="seller.name" ref="ratingsWrapper">
     <div class="ratings-content">
       <div class="overview">
         <div class="overview-left">

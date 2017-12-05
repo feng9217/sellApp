@@ -1,5 +1,5 @@
 <template>
-  <div class="goods">
+  <div class="goods" v-if="seller.name">
     <scroll class="menu-wrapper" ref="menuWrapper" :probe-type="probeType" :listen-scroll="listenScroll" @scroll="scroll">
       <div @touchstart="onMenuTouchStart">
       <ul>
