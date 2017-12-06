@@ -1,5 +1,5 @@
 // 使用 localStorage 是为了存储当前商家(id)对应的 favorite 状态
-export function saveToLocal(id,key,value) {
+export function saveToLocal(id, key, value) {
   // 开辟存储字段
   let seller = window.localStorage.__seller__
   // 本地从来没创建过
@@ -17,7 +17,18 @@ export function saveToLocal(id,key,value) {
   }
   seller[id][key] = value
   // 执行完后要以字符串形式存储
-  window.localstorage.__seller__ = JSON.stringify(seller)
+  window.localStorage.__seller__ = JSON.stringify(seller)
 }
 
-export function loadFromLocal(id,key,def) {}
+export function loadFromLocal(id, key, def) {
+  let seller = window.localStorage.__seller__
+  if (!seller) {
+    return def
+  }
+  seller = JSON.parse(seller)[id]
+  if (!seller) {
+    return def
+  }
+  let ret = seller[key]
+  return ret || def
+}

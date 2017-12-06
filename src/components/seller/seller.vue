@@ -79,6 +79,7 @@
   import star from '../star-score/star-score.vue'
   import split from '../split/split.vue'
   import Bscroll from 'better-scroll'
+  import {saveToLocal, loadFromLocal} from '../../common/js/store.js'
 
   // const ERR_OK = 0
 
@@ -94,7 +95,9 @@
     data() {
       return {
         classMap: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
-        favorite: false
+        favorite: (() => {
+          return loadFromLocal(this.seller.id, 'favorite', false)
+        })()
       }
     },
     mounted() {
@@ -147,6 +150,7 @@
       },
       toggleFavorite() {
         this.favorite = !this.favorite
+        saveToLocal(this.seller.id, 'favorite', this.favorite)
       }
     },
     components: {
