@@ -20,19 +20,19 @@ npm run build --report
 For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).  
 
 header页组件演示:  
-![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/headerDemo.gif)  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/headerDemo.gif )  
 
 goods页组件演示:  
-![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/goodsDemo1.gif)  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/goodsDemo1.gif )  
 
 foods页组件演示:  
-![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/goodsDemo2.gif)  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/goodsDemo2.gif )  
 
 ratings页组件演示:  
-![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/ratings.gif)  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/ratings.gif )  
 
 seller页组件演示:  
-![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/seller.gif)  
+![image](https://github.com/feng9217/sellApp/blob/master/resource/demoGIF/seller.gif )  
 
 <h1>准备事项</h1>  
 
